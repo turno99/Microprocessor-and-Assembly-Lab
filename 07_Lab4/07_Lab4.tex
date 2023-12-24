@@ -1,0 +1,390 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage[a4paper,width=200mm,top=25mm,bottom=25mm]{geometry}
+\usepackage{listings}
+\title{
+{\includegraphics[width=12cm, height=10cm]{images/csedu_logo.png}}\\
+{\large Department of Computer Science and Engineering,\\      University of Dhaka}\\
+{ Lab Report for Lab 4 }
+}
+
+
+
+\author{ Submitted by: Prothito Shovon Majumder \\ Submitted to: Dr. Upama Kabir }
+
+
+
+\begin{document}
+\maketitle
+
+\newpage
+\section{Task i}
+
+\subsection{Explanation of DATA directive:}
+\textbf{DATA}\\
+The \verb|DATA| directive informs the assembler that a label is a data-in-code label. This means that the label is the address of data within a code segment.\\
+The syntax of \verb|DATA| is\\
+\textup{label} \verb|DATA|\\
+where \textup{label} is the label of the data definition. The \verb|DATA| directive must be on the same line as \textup{label}.
+\begin{lstlisting}
+                        AREA            task1, CODE
+                        ; code
+                        ; code
+                        MOV             pc, lr
+                              DATA
+                        DCB             1, 2, 3
+\end{lstlisting}
+\subsection{Explanation of ALIGN directive:}
+\textbf{ALIGN}\\
+The \verb|ALIGN| directive is used to ensure the data and code is aligned to appropriate boundaries. This directive aligns the current location to a specified boundary by padding with zeros or \verb|NOP| instructions.\\
+The syntax of \verb|ALIGN| is\\
+\verb|ALIGN {expr{,offset{,pad{,padsize}}}}|\\
+where \\
+\verb|expr| is a numeric expression evaluating to any power of 2 from 2\textsuperscript{0} to 2\textsuperscript{31}.\\
+\verb|offset| can be any numeric expression.\\
+\verb|pad| can be any numeric expression.\\
+\verb|padsize| can be 1, 2 or 4.
+\begin{lstlisting}
+        AREA    task1, CODE
+        DCB     1      ; This example places the two bytes in the 
+        ALIGN   4,3    ; first and fourth bytes of the same word.
+        DCB     1      ; The second DCB is offset by 3 bytes from the first DCB.                        
+\end{lstlisting}
+\pagebreak
+\section{Task ii}
+\subsection{Explanation of Code:}
+A large value is stored into a register, and it is added (while updating the condition flags) with itself, causing overflow. Afterwards, the flag state, exception/interrupt state and execution state are written into registers using the \verb|MRS| instruction.
+\subsection{Description of Instructions:}
+\textbf{MOV}\\
+The \verb|MOV| instruction copies the value of \verb|Operand2| into \verb|Rd|.\\
+\verb|MOV{S}{cond} Rd, Operand2|\\
+\verb|MOV{cond} Rd, #imm16|\\
+\textbf{ADD}\\
+The \verb|ADD| instruction adds the values in Rn and Operand2 or imm12. \verb|S| is an optional suffix. If \verb|S| is specified, the condition flags are updated on the result of the operation.\\
+\verb|ADD{S}{cond} {Rd}, Rn, Operand2|\\
+\textbf{MRS}\\
+The \verb|MRS| instruction moves the contents of a PSR to a general-purpose register.
+\verb|MRS{cond} Rd, psr|
+\pagebreak
+\subsection{Screenshot of the System State after Loading the Code:}
+\begin{figure}[ht]
+     \centering
+     \includegraphics[scale=.7]{images/beforetask2.JPG}
+     \caption{The system state after loading the code}
+     \label{fig:before_task_two}
+ \end{figure}
+ \pagebreak
+ \subsection{Screenshot of the System State after Code Execution:}
+ \begin{figure}[ht]
+     \centering
+     \includegraphics[scale=.7]{images/aftertask2.JPG}
+     \caption{The system state after executing the code}
+     \label{fig:after_task_two}
+ \end{figure}
+ \pagebreak
+\section{Task iii(a)}
+\subsection{Explanation of Code:}
+The values of the sum (initially zero) and the loop endpoint are loaded into registers. We iterate over the values of \verb|i| and increment it in each iteration. If the value of \verb|i| exceeds the endpoint, we terminate the loop and store the resultant sum in memory. Otherwise, we add the squared value of \verb|i| to the sum and continue iterating.
+\subsection{Description of Instructions:}
+\textbf{MOV}\\
+The \verb|MOV| instruction copies the value of \verb|Operand2| into \verb|Rd|.\\
+\verb|MOV{S}{cond} Rd, Operand2|\\
+\verb|MOV{cond} Rd, #imm16|\\
+\textbf{ADD}\\
+The \verb|ADD| instruction adds the values in Rn and Operand2 or imm12. \verb|S| is an optional suffix. If \verb|S| is specified, the condition flags are updated on the result of the operation.\\
+\verb|ADD{S}{cond} {Rd}, Rn, Operand2|\\
+\textbf{MUL}\\
+The \verb|MUL| istruction multiplies the values from Rn and Rm, and places the least significant 32 bits of he result in Rd.\\
+\verb |MUL{S}{cond} {Rd}, Rn, Rm|\\
+\textbf{LDR}\\
+The \verb|LDR| pseudo-instruction loads a register with either a 32-bit constant value or an address.\\
+\verb|LDR{type}{cond} Rt, [Rn {, #offset}]| \\
+\textbf{STR}\\
+The \verb|STR| pseudo-instruction loads a register with values from either a 32-bit constant or an address.\\
+\verb|STR{type}{cond} Rt, [Rn {, #offset}]|\\  
+\textbf{CMP}\\
+The \verb|CMP| instruction subtracts the value of Operand2 from the value in Rn. This is the same as a \verb|SUBS| instruction, except that the result is discarded.\\
+\verb|CMP{cond} Rn, Operand2|\\
+\textbf{BGE}\\
+The \verb|BGE| instruction performs branching to a label when the flag values for greater than are set to true.
+\verb|BGE label|\\
+\textbf{DCD}\\
+The \verb|DCD| directive allocates one or more words of memory, aligned on four-byte boundaries, and defines the initial runtime contents of the memory.\\
+\verb|{label} DCD{U} expr{,expr}|\\
+\pagebreak
+\subsection{Screenshot of the System State after Loading the Code:}
+\begin{figure}[ht]
+     \centering
+     \includegraphics[scale=.7]{images/beforetask3a.JPG}
+     \caption{The system state after loading the code}
+     \label{fig:before_task_three_a}
+ \end{figure}
+ \pagebreak
+ \subsection{Screenshot of the System State after Code Execution:}
+ \begin{figure}[ht]
+     \centering
+     \includegraphics[scale=.7]{images/aftertask3a.JPG}
+     \caption{The system state after executing the code}
+     \label{fig:after_task_three_a}
+ \end{figure}
+ \pagebreak
+\section{Task iii(b)}
+\subsection{Explanation of Code:}
+The values of two sides (base and height) of a right-angled triangle are loaded into registers from memory. The sum of their squares is calculated and stored into another register, which matches the squared value of the hypotenuse of the triangle, thus verifying the Pythagoras theorem.\\
+\subsection{Description of Instructions:}
+\textbf{MOV}\\The \verb|MOV| instruction copies the value of \verb|Operand2| into \verb|Rd|.\\
+\verb|MOV{S}{cond} Rd, Operand2|\\
+\verb|MOV{cond} Rd, #imm16|\\
+\textbf{ADD}\\
+The \verb|ADD| instruction adds the values in Rn and Operand2 or imm12. \verb|S| is an optional suffix. If \verb|S| is specified, the condition flags are updated on the result of the operation.\\
+\verb|ADD{S}{cond} {Rd}, Rn, Operand2|\\
+\textbf{MUL}\\
+The \verb|MUL| istruction multiplies the values from Rn and Rm, and places the least significant 32 bits of he result in Rd.\\
+\verb |MUL{S}{cond} {Rd}, Rn, Rm|\\
+\textbf{LDR}\\
+The \verb|LDR| pseudo-instruction loads a register with either a 32-bit constant value or an address.\\
+\verb|LDR{type}{cond} Rt, [Rn {, #offset}]| \\
+\textbf{STR}\\
+The \verb|STR| pseudo-instruction loads a register with values from either a 32-bit constant or an address.\\
+\verb|STR{type}{cond} Rt, [Rn {, #offset}]|\\  
+\textbf{DCDU}\\
+The \verb|DCD| directive allocates one or more words of memory, aligned on four-byte boundaries, and defines the initial runtime contents of the memory.\verb|DCDU| is the same, except that the memory alignment is arbitrary.\\
+\verb|{label} DCDU expr{,expr}|\\
+ \pagebreak
+\subsection{Screenshot of the System State after Loading the Code:}
+\begin{figure}[ht]
+     \centering
+     \includegraphics[scale=.7]{images/beforetask3b.JPG}
+     \caption{The system state after loading the code}
+     \label{fig:before_task_three_b}
+ \end{figure}
+ \pagebreak
+ \subsection{Screenshot of the System State after Code Execution:}
+ \begin{figure}[ht]
+     \centering
+     \includegraphics[scale=.7]{images/aftertask3b.JPG}
+     \caption{The system state after executing the code}
+     \label{fig:after_task_three_b}
+ \end{figure}
+ \pagebreak\section{Task iv(a)}
+\subsection{Explanation of Code:} 
+A string is defined in memory using the DCB instruction, with predefined value "ABCD" in this case. The string is loaded into a register to show its contents.
+\subsection{Description of Instructions:}
+\textbf{LDR}\\
+The \verb|LDR| pseudo-instruction loads a register with either a 32-bit constant value or an address.\\
+\verb|LDR{type}{cond} Rt, [Rn {, #offset}]| \\
+\textbf{DCB}\\
+The \verb|DCB| directive allocates one or more bytes of memory, and defines the initial runtime contents of the memory.\\
+\verb|{label} DCB expr{,expr}...|\\
+ \textbf{MOV32} \\ The \verb|MOV32| instruction loads a register with either a 32-bit immediate value or any address.\\
+ \pagebreak
+\subsection{Screenshot of the System State after Loading the Code:}
+\begin{figure}[ht]
+     \centering
+     \includegraphics[scale=.7]{images/beforetask4a.JPG}
+     \caption{The system state after loading the code}
+     \label{fig:before_task_four_a}
+ \end{figure}
+ \pagebreak
+ \subsection{Screenshot of the System State after Code Execution:}
+ \begin{figure}[ht]
+     \centering
+     \includegraphics[scale=.7]{images/aftertask3a.JPG}
+     \caption{The system state after executing the code}
+     \label{fig:after_task_four_a}
+ \end{figure}
+ \pagebreak\section{Task iv(b)}
+\subsection{Explanation of Code:}
+Initially, a 0-terminated string is declared with predefined values in memory. The length of the string is calculated, iterating over the characters in the string until a 0-character is reached. Then, we iterate from the left and right point of the string and progress towards the midpoint from both directions, until the pointing indexes bypass each other. During each iteration, the characters in the pointing indexes are swapped, which ultimately results in the reversal of the string.
+\subsection{Description of Instructions:}
+\textbf{LDR}\\
+The \verb|LDR| pseudo-instruction loads a register with either a 32-bit constant value or an address.\\
+\verb|LDR{type}{cond} Rt, [Rn {, #offset}]| \\
+\textbf{MOV}\\
+The \verb|MOV| instruction copies the value of \verb|Operand2| into \verb|Rd|.\\
+\verb|MOV{S}{cond} Rd, Operand2|\\
+\verb|MOV{cond} Rd, #imm16|\\
+\textbf{ADD}\\
+The \verb|ADD| instruction adds the values in Rn and Operand2 or imm12. \verb|S| is an optional suffix. If \verb|S| is specified, the condition flags are updated on the result of the operation.\\
+\verb|ADD{S}{cond} {Rd}, Rn, Operand2|\\
+\textbf{SUB}\\
+The \verb|SUB| instruction subtracts the value of Operand2 or imm12 from the value in Rn. If \verb|S| is specified, the condition flags are updated on the result of the operation.\\
+\verb|SUB{S}{cond} {Rd}, Rn, Operand2|\\
+\textbf{LDRB}\\
+The \verb|LDRB| instruction calculates an address from a base register value and an offset register value, loads a byte from memory, zero-extends it to form a 32-bit word, and writes it to a register. \\
+\verb|LDRB<c> <Rt>, [<Rn>, <Rm>]|\\
+\textbf{STRB}\\
+The \verb|STRB| instruction calculates an address from a base register value and an offset register value, and stores a byte from a register to memory. \\
+\verb|STRB<c> <Rt>, [<Rn>, <Rm>]|\\
+\textbf{B}\\
+The \verb|B| instruction performs a branch to a label.\\
+\verb|B{cond}{.W} label|\\
+\textbf{BEQ}\\
+The \verb|BEQ| instruction performs a conditional branch to a label if the flag set by an equality check is true.\\
+\verb|BEQ {.W} label|\\
+\textbf{CMP}\\
+The \verb|CMP| instruction subtracts the value of Operand2 from the value in Rn. This is the same as a \verb|SUBS| instruction, except that the result is discarded.\\
+\verb|CMP{cond} Rn, Operand2|\\
+\textbf{BHS}\\
+The \verb|BHS| instruction performs a conditional branch to a label if the flag modified by a check, if an unsigned value is greater or same, is set accordingly.\\
+\verb|BHS {.W} label|\\
+\textbf{DCDU}\\
+The \verb|DCD| directive allocates one or more words of memory, aligned on four-byte boundaries, and defines the initial runtime contents of the memory.\verb|DCDU| is the same, except that the memory alignment is arbitrary.\\
+\verb|{label} DCDU expr{,expr}|\\
+
+\subsection{Screenshot of the System State after Loading the Code:}
+\begin{figure}[ht]
+     \centering
+     \includegraphics[scale=.7]{images/beforetask4b.JPG}
+     \caption{The system state after loading the code}
+     \label{fig:before_task_four_b}
+ \end{figure}
+ \pagebreak
+ \subsection{Screenshot of the System State after Code Execution:}
+ \begin{figure}[ht]
+     \centering
+     \includegraphics[scale=.7]{images/aftertask4b.JPG}
+     \caption{The system state after executing the code}
+     \label{fig:after_task_four_b}
+ \end{figure}
+ \pagebreak
+\section{Task iv(c)}
+\subsection{Explanation of Code:}
+A 0-terminated string (with a predefined value) and a variable (for storing the length of the string) is declared initially. After loading the string into a register, we start iterating from the first character until we find the terminating 0-character, increasing the result for the length in each iteration by 1. Finally, the result is stored into memory.
+\subsection{Description of Instructions:}
+\textbf{LDR}\\
+The \verb|LDR| pseudo-instruction loads a register with either a 32-bit constant value or an address.\\
+\verb|LDR{type}{cond} Rt, [Rn {, #offset}]| \\
+\textbf{STR}\\
+The \verb|STR| pseudo-instruction loads a register with values from either a 32-bit constant or an address.\\
+\verb|STR{type}{cond} Rt, [Rn {, #offset}]|\\  
+\textbf{ADD}\\
+The \verb|ADD| instruction adds the values in Rn and Operand2 or imm12. \verb|S| is an optional suffix. If \verb|S| is specified, the condition flags are updated on the result of the operation.\\
+\verb|ADD{S}{cond} {Rd}, Rn, Operand2|\\
+\textbf{B}\\
+The \verb|B| instruction performs a branch to a label.\\
+\verb|B{cond}{.W} label|\\
+\textbf{BEQ}\\
+The \verb|BEQ| instruction performs a conditional branch to a label if the flag set by an equality check is true.\\
+\verb|BEQ {.W} label|\\
+\textbf{CMP}\\
+The \verb|CMP| instruction subtracts the value of Operand2 from the value in Rn. This is the same as a \verb|SUBS| instruction, except that the result is discarded.\\
+\verb|CMP{cond} Rn, Operand2|\\
+\textbf{DCDU}\\
+The \verb|DCD| directive allocates one or more words of memory, aligned on four-byte boundaries, and defines the initial runtime contents of the memory.\verb|DCDU| is the same, except that the memory alignment is arbitrary.\\
+\verb|{label} DCDU expr{,expr}|\\
+\pagebreak
+\subsection{Screenshot of the System State after Loading the Code:}
+\begin{figure}[ht]
+     \centering
+     \includegraphics[scale=.7]{images/beforetask4c.JPG}
+     \caption{The system state after loading the code}
+     \label{fig:before_task_four_c}
+ \end{figure}
+ \pagebreak
+ \subsection{Screenshot of the System State after Code Execution:}
+ \begin{figure}[ht]
+     \centering
+     \includegraphics[scale=.7]{images/aftertask4c.JPG}
+     \caption{The system state after executing the code}
+     \label{fig:after_task_four_c}
+ \end{figure}
+ \pagebreak
+\section{Task iv(d)}
+\subsection{Explanation of Code:}
+Two strings with predefined values are defined in memory. After loading them into two registers, we start comparing them character by character, until both of them are empty simultaneously. If a position is found, where one character in a string differs from the character in the same index of the other string, we update flags for greater than or less than conditions and exit the loop.
+\subsection{Description of Instructions:}
+\textbf{LDR}\\
+The \verb|LDR| pseudo-instruction loads a register with either a 32-bit constant value or an address.\\
+\verb|LDR{type}{cond} Rt, [Rn {, #offset}]| \\
+\textbf{LDRB}\\
+The \verb|LDRB| instruction calculates an address from a base register value and an offset register value, loads a byte from memory, zero-extends it to form a 32-bit word, and writes it to a register. \\
+\verb|LDRB<c> <Rt>, [<Rn>, <Rm>]|\\
+\textbf{ADD}\\
+The \verb|ADD| instruction adds the values in Rn and Operand2 or imm12. \verb|S| is an optional suffix. If \verb|S| is specified, the condition flags are updated on the result of the operation.\\
+\verb|ADD{S}{cond} {Rd}, Rn, Operand2|\\
+\textbf{ORR}\\
+The \verb|ORR| instruction performs bitwise \verb|ORR| operations on the values in Rn and Operand2.\\
+\verb|ORR{S}{cond} Rd, Rn, Operand2|\\
+\textbf{MOVGT}
+The \verb|MOVGT| instruction performs a conditional move, in case of the flag modified by a check for greater than (signed comparison) is set accordingly.
+\verb|MOVGT Rd, #imm|
+\textbf{MOVLT}
+The \verb|MOVLT| instruction performs a conditional move, in case of the flag modified by a check for less than (signed comparison) is set accordingly.
+\verb|MOVLT Rd, #imm|
+\textbf{BEQ}\\
+The \verb|BEQ| instruction performs a conditional branch to a label if the flag set by an equality check is true.\\
+\verb|BEQ {.W} label|\\
+\textbf{CMP}\\
+The \verb|CMP| instruction subtracts the value of Operand2 from the value in Rn. This is the same as a \verb|SUBS| instruction, except that the result is discarded.\\
+\verb|CMP{cond} Rn, Operand2|\\
+\textbf{DCB}\\
+The \verb|DCB| directive allocates one or more bytes of memory, and defines the initial runtime contents of the memory.\\
+\verb|{label} DCB expr{,expr}...|\\
+\pagebreak
+\subsection{Screenshot of the System State after Loading the Code:}
+\begin{figure}[ht]
+     \centering
+     \includegraphics[scale=.7]{images/beforetask4d.JPG}
+     \caption{The system state after loading the code}
+     \label{fig:before_task_four_d}
+ \end{figure}
+ \pagebreak
+ \subsection{Screenshot of the System State after Code Execution:}
+ \begin{figure}[ht]
+     \centering
+     \includegraphics[scale=.7]{images/aftertask4d.JPG}
+     \caption{The system state after executing the code}
+     \label{fig:after_task_four_d}
+ \end{figure}
+ \pagebreak
+\section{Task iv(e)}
+\subsection{Explanation of Code:}
+Two 0-terminated strings with predefined values and an empty string are declared in memory. After loading the first string in a register, we keep iterating from the first character until we find the terminating 0-character, adding the current character to the previously declared empty string. After this loop ends, we follow the same process for the second string, starting by loading it in a register and finishing after adding all characters to the string which was initialized as empty. Finally, the resultant string is stored in memory.
+\subsection{Description of Instructions:}
+\textbf{LDR}\\
+The \verb|LDR| pseudo-instruction loads a register with either a 32-bit constant value or an address.\\
+\verb|LDR{type}{cond} Rt, [Rn {, #offset}]| \\
+\textbf{LDRB}\\
+The \verb|LDRB| instruction calculates an address from a base register value and an offset register value, loads a byte from memory, zero-extends it to form a 32-bit word, and writes it to a register. \\
+\verb|LDRB<c> <Rt>, [<Rn>, <Rm>]|\\
+\textbf{STRB}\\
+The \verb|STRB| instruction calculates an address from a base register value and an offset register value, and stores a byte from a register to memory. \\
+\verb|STRB<c> <Rt>, [<Rn>, <Rm>]|\\
+\textbf{MOV}\\The \verb|MOV| instruction copies the value of \verb|Operand2| into \verb|Rd|.\\
+\verb|MOV{S}{cond} Rd, Operand2|\\
+\verb|MOV{cond} Rd, #imm16|\\
+\textbf{ADD}\\
+The \verb|ADD| instruction adds the values in Rn and Operand2 or imm12. \verb|S| is an optional suffix. If \verb|S| is specified, the condition flags are updated on the result of the operation.\\
+\verb|ADD{S}{cond} {Rd}, Rn, Operand2|\\
+\textbf{B}\\
+The \verb|B| instruction performs a branch to a label.\\
+\verb|B{cond}{.W} label|\\
+\textbf{BEQ}\\
+The \verb|BEQ| instruction performs a conditional branch to a label if the flag set by an equality check is true.\\
+\verb|BEQ {.W} label|\\
+\textbf{CMP}\\
+The \verb|CMP| instruction subtracts the value of Operand2 from the value in Rn. This is the same as a \verb|SUBS| instruction, except that the result is discarded.\\
+\verb|CMP{cond} Rn, Operand2|\\
+\textbf{DCB}\\
+The \verb|DCB| directive allocates one or more bytes of memory, and defines the initial runtime contents of the memory.\\
+\verb|{label} DCB expr{,expr}...|\\
+\pagebreak
+\subsection{Screenshot of the System State after Loading the Code:}
+\begin{figure}[ht]
+     \centering
+     \includegraphics[scale=.7]{images/beforetask4e.JPG}
+     \caption{The system state after loading the code}
+     \label{fig:before_task_four_e}
+ \end{figure}
+ \pagebreak
+ \subsection{Screenshot of the System State after Code Execution:}
+ \begin{figure}[ht]
+     \centering
+     \includegraphics[scale=.7]{images/aftertask4e.JPG}
+     \caption{The system state after executing the code}
+     \label{fig:after_task_four_e}
+ \end{figure}
+ \pagebreak
+\end{document}
